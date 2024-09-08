@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container pt-3 pt-lg-5">
+    <h3 class="text-center my-4 my-lg-5 py-4 py-lg-5 display-4 display-md-3">Editar Propiedad</h3>
+    <form action="{% url 'edit_propiedad' id=inmueble.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div id="stepper" class="bs-stepper">
+            <div class="bs-stepper-header" role="tablist">
+                <div class="step" data-target="#step-1">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="step-1">
+                        <span class="bs-stepper-circle btn-step">1</span>
+                        <span class="bs-stepper-label">Información básica</span>
+                    </button>
+                </div>
+                <div class="line"></div>
+                <div class="step" data-target="#step-2">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="step-2">
+                        <span class="bs-stepper-circle btn-step">2</span>
+                        <span class="bs-stepper-label">Detalles del inmueble</span>
+                    </button>
+                </div>
+                <div class="line"></div>
+                <div class="step" data-target="#step-3">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="step-3">
+                        <span class="bs-stepper-circle btn-step">3</span>
+                        <span class="bs-stepper-label">Ubicación</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bs-stepper-content">
+                <!-- Step 1 -->
+                <div id="step-1" class="content" role="tabpanel" aria-labelledby="step-1-trigger">
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-6 mb-3">
+                            <label class="form-label">Nombre:</label>
+                            <input type="text" class="form-control" name="nombre" value="{{ inmueble.nombre | default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-6 mb-3">
+                            <label class="form-label">Descripción:</label>
+                            <textarea class="form-control" name="descripcion" maxlength="1500" required>{{ inmueble.descripcion }}</textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-sccs" type="button" id="next-step-1">Siguiente</button>
+                </div>
+
+                <!-- Step 2 -->
+                <div id="step-2" class="content" role="tabpanel" aria-labelledby="step-2-trigger">
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label class="form-label">m² construidos:</label>
+                            <input type="number" class="form-control" name="m2_construidos" value="{{ inmueble.m2_construidos | default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label class="form-label">m² totales:</label>
+                            <input type="number" class="form-control" name="m2_totales" value="{{ inmueble.m2_totales | default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label class="form-label">Cantidad de estacionamientos:</label>
+                            <input type="number" class="form-control" name="num_estacionamientos" value="{{ inmueble.num_estacionamientos | default:'' }}">
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label class="form-label">Cantidad de habitaciones:</label>
+                            <input type="number" class="form-control" name="num_habitaciones" value="{{ inmueble.num_habitaciones | default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label class="form-label">Cantidad de baños:</label>
+                            <input type="number" class="form-control" name="num_baños" value="{{ inmueble.num_baños | default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label class="form-label">Precio de arriendo mensual:</label>
+                            <input type="number" class="form-control" name="precio_mensual_arriendo" min="1000" value="{{ inmueble.precio_mensual_arriendo | default:'' }}" required>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary btn-wrng" type="button" id="prev-step-2">Anterior</button>
+                    <button class="btn btn-primary btn-sccs" type="button" id="next-step-2">Siguiente</button>
+                </div>
+
+                <!-- Step 3 -->
+                <div id="step-3" class="content" role="tabpanel" aria-labelledby="step-3-trigger">
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label class="form-label">Región:</label>
+                            <select class="form-select" name="region_cod" id="region_cod" required>
+                                <option value="">Seleccione una región</option>
+                                {% for region in regiones %}
+                                    <option value="{{ region.cod }}" {% if region.cod == cod_region %}selected{% endif %}>{{ region.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label class="form-label">Comuna:</label>
+                            <select class="form-select" name="comuna_cod" id="comuna_cod" required>
+                                <option value="">Seleccione una comuna</option>
+                                {% for comuna in comunas %}
+                                    <option value="{{ comuna.cod }}" {% if comuna.cod == inmueble.comuna_id %}selected{% endif %}>{{ comuna.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label class="form-label">Dirección:</label>
+                            <input type="text" class="form-control" name="direccion" value="{{ inmueble.direccion | default:'' }}" required>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label class="form-label">Tipo de inmueble:</label>
+                            <select class="form-select" name="tipo_de_inmueble" required>
+                                <option value="">Seleccione un tipo</option>
+                                {% for tipo in tipos_inmuebles %}
+                                    <option value="{{ tipo.0 }}" {% if tipo.0 == inmueble.tipo_de_inmueble %}selected{% endif %}>{{ tipo.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary btn-wrng" type="button" id="prev-step-3">Anterior</button>
+                    <button type="submit" class="btn btn-success btn-sccs">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Script del stepper -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var stepper = new Stepper(document.querySelector('#stepper'), {
+            linear: false,
+            animation: true
+        });
+
+        document.getElementById('next-step-1').addEventListener('click', function () {
+            stepper.next();
+        });
+
+        document.getElementById('prev-step-2').addEventListener('click', function () {
+            stepper.previous();
+        });
+
+        document.getElementById('next-step-2').addEventListener('click', function () {
+            stepper.next();
+        });
+
+        document.getElementById('prev-step-3').addEventListener('click', function () {
+            stepper.previous();
+        });
+    });
+</script>
+{% endblock %}

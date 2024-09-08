@@ -1,0 +1,54 @@
+ <!-- Paginación -->
+    <div class="d-flex justify-content-center pt-4">
+        <nav aria-label="Paginación de propiedades">
+            <ul class="pagination">
+                {% if propiedades.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link page-link-custom" href="?page=1" aria-label="Primera">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link page-link-custom" href="?page={{ propiedades.previous_page_number }}#propiedades-lista" aria-label="Anterior">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link page-link-custom">&laquo;&laquo;</span></li>
+                    <li class="page-item disabled"><span class="page-link page-link-custom">&laquo;</span></li>
+                {% endif %}
+
+                <!-- Mostrar páginas disponibles -->
+                {% for num in propiedades.paginator.page_range %}
+                    {% if propiedades.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link page-link-custom">{{ num }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link page-link-custom" href="?page={{ num }}#propiedades-lista">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                
+
+                {% if propiedades.has_next %}
+                    <li class="page-item page-link-custom">
+                        <a class="page-link page-link-custom" href="?page={{ propiedades.next_page_number }}#propiedades-lista" aria-label="Siguiente">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>                       
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link page-link-custom" href="?page={{ propiedades.paginator.num_pages }}" aria-label="Última">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link page-link-custom">&raquo;</span></li>
+                    <li class="page-item disabled"><span class="page-link page-link-custom">&raquo;&raquo;</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>

@@ -1,0 +1,275 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+  .nav-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .nav-link.active, .nav-link:hover {
+    background-color: #f77f00;
+    color: #064262 !important; /* Cambia el color del texto al hacer hover o estar activo */
+    transition: all ease-in-out 0.4s;
+  }
+
+  .nav-link.active .custom-card-icon, .nav-link:hover .custom-card-icon {
+    color: #064262 !important; /* Cambia el color del ícono cuando el enlace está activo o en hover */
+  }
+
+  .nav-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #eae2b7 !important;
+  }
+
+  .nav-item p.active {
+    color: #003049 !important;
+  }
+
+  .bg-dark {
+    background-color: #064262 !important;
+  }
+
+  .custom-sidebar {
+    margin-left: -12px !important;
+    margin-bottom: -50px !important;
+    margin-top: -2px !important;
+  }
+</style>
+
+
+
+<div class="container-fluid pt-4 mt-5">
+  <div class="row">
+    <!-- Sidebar -->
+    
+    <div class="col-2 col-md-2 col-lg-2 custom-sidebar">
+      <div class="d-flex flex-column bg-dark" style="height: 100vh;">
+        <div class="text-center pt-5">
+          <a href="/"><img src="{% static 'img/logo.png' %}" style="width: 60px;" alt=""></a> 
+          <p class="pt-4 d-none d-md-block">Bienvenido: <span class="custon-span">{{ user.first_name }}</span></p>     
+        </div>
+        <ul class="nav flex-column mb-auto my-auto">
+          <li class="nav-item text-center">
+            <a href="#" class="nav-link active py-3" id="password-link">
+              <div class="row d-flex">
+                <div class="col">
+                  <i class="fa-solid fa-key custom-card-icon fa-xl pb-3"></i>
+                </div>
+              </div>
+              <div class="col d-none d-md-block">
+                <p class="">Cambiar contraseña</p>
+              </div>
+            </a> 
+          </li>
+          <li class="nav-item text-center">
+            <a href="#" class="nav-link py-3" id="profile-link">
+              <div class="row d-flex">
+                <div class="col">
+                  <i class="fa-regular fa-user custom-card-icon fa-xl pb-3"></i>
+                </div>
+              </div>
+              <div class="col d-none d-md-block">
+                <p class="">Actualizar perfil</p>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item text-center mb-4">
+            <a href="#" class="nav-link py-3" id="properties-link">
+              <div class="row d-flex">
+                <div class="col">
+                  <i class="fa-solid fa-house-user custom-card-icon fa-xl pb-3"></i> 
+                </div>
+              </div>
+              <div class="col d-none d-md-block">
+                <p class="">Mis propiedades</p>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+
+
+    <!-- Content Area -->
+
+        <div class="col-10 m-auto">
+          <!-- Change Password Section -->
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-8 col-lg-4 mx-auto">
+                <div id="password-section" class="content-section">
+                <h4 class="text-center pb-4 display-5">Cambia tu contraseña</h4>
+                <form action="#" method="post">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                    <label class="form-label">Nueva contraseña:</label>
+                    <input type="password" class="form-control" name="password" placeholder="**********" required />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Repita contraseña:</label>
+                    <input type="password" class="form-control" name="password_repeat" placeholder="**********" required />
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-sm btn-danger btn-dng my-3">
+                      <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                      Cambiar contraseña
+                    </button>
+                  </div>
+                </form>
+              </div>
+              </div>
+              
+            </div>
+          </div>
+     
+
+          <!-- Update Profile Section -->
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-8 col-lg-6 mx-auto">
+                <div id="profile-section" class="content-section d-none">
+                  <h4 class="text-center pb-4 display-5">Actualiza tus datos</h4>
+                  <form action="{% url 'profile' %}" method="post">
+                    {% csrf_token %}
+                    <div class="container">
+                      <div class="row">
+                       
+                      
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <div class="mb-3">
+                              <label class="form-label">Nombre:</label>
+                              <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}" required />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Apellido:</label>
+                              <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email:</label>
+                                <input type="email" class="form-control" name="email" value="{{ user.email }}" required />
+                            </div>
+                        </div>
+
+                      <div class="col-12 col-md-6 col-lg-6">
+                          <div class="mb-3">
+                          <label class="form-label">Teléfono:</label>
+                          <input type="text" class="form-control" name="telefono" value="{{ user.userprofile.telefono_personal }}" required />
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Dirección:</label>
+                          <input type="text" class="form-control" name="direccion" value="{{ user.userprofile.direccion }}" required />
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Rol:</label>
+                          <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" name="rol" value="arrendador" {% if user.userprofile.rol == 'arrendador' %} checked {% endif %} />
+                            <label class="form-check-label">Arrendador</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" name="rol" value="arrendatario" {% if user.userprofile.rol == 'arrendatario' %} checked {% endif %} />
+                            <label class="form-check-label">Arrendatario</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    </div>    
+                   
+                    <div class="d-flex justify-content-center">
+                      <button type="submit" class="btn btn-sm btn-danger btn-dng my-3">
+                        <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                        Actualizar datos
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>        
+
+          <!-- Properties Section -->
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 col-lg-8 mx-auto">
+                <div id="properties-section" class="content-section d-none">
+                  {% if user.userprofile.rol == 'arrendador' %}
+                  <h4 class="text-center pb-4 display-5">Tus propiedades</h4>
+                  <div class="row">
+                    {% for propiedad in propiedades %}
+                    <div class="col-12 col-md-6 col-lg-6 mb-3">
+                      <div class="card shadow-lg" style="max-width: 100%;">
+                        <div class="row g-0 align-items-center">
+                          <div class="col-md-5">
+                            <img src="{% static 'img/casa_ejemplo.jpeg' %}" class="img-fluid rounded-start" alt="Propiedad" />
+                          </div>
+                          <div class="col-md-7">
+                            <div class="card-body">
+                              <h5 class="card-title">{{ propiedad.name }}</h5>
+                              <p class="card-text">{{ propiedad.comuna }}</p>
+                              <div class="text-center">
+                                <a href="{% url 'edit_propiedad' id=propiedad.id %}" class="card-link text-warning">
+                                  <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                                  Editar
+                                </a>
+                                <a href="{% url 'delete_propiedad' id=propiedad.id %}" class="card-link text-danger">
+                                  <i class="fa-solid fa-trash fa-lg"></i>
+                                  Borrar
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  <h4 class="text-center pb-4 display-5">Nada que mostrar</h4>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+</div>
+<script>
+  // JavaScript to switch sections
+  document.getElementById('password-link').addEventListener('click', function() {
+    showSection('password-section');
+  });
+  document.getElementById('profile-link').addEventListener('click', function() {
+    showSection('profile-section');
+  });
+  document.getElementById('properties-link').addEventListener('click', function() {
+    showSection('properties-section');
+  });
+
+  function showSection(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('.content-section').forEach(section => {
+      section.classList.add('d-none');
+    });
+    // Show the selected section
+    document.getElementById(sectionId).classList.remove('d-none');
+  }
+  // Seleccionamos todos los enlaces de la navegación
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  // Iteramos sobre cada enlace para agregar un evento de clic
+  navLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      // Quitamos la clase "active" de todos los enlaces
+      navLinks.forEach(nav => nav.classList.remove('active'));
+      // Añadimos la clase "active" solo al enlace que se ha clicado
+      this.classList.add('active');
+    });
+  });
+</script>
+
+{% endblock %}
